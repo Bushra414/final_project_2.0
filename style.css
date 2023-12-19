@@ -49,18 +49,27 @@ body {
   }
   form label {
     display: flex;
-    justify-content: center;
-    align-items: center;
+   
     flex-direction: column;
     margin-bottom: 10px;
     margin-top: 10px;
     font-family: Poppins-Bold;
   }
+  form .names{
+    display: flex;
+  
+    justify-content: start;
+  }
+  form pos{
+    display: flex;
+    flex-direction: column;
+  }
   input {
-    width: 100%;
     border: none;
     border-bottom: solid rgb(206, 202, 202) 2px;
     height: 30px;
+    width: 95%;
+    margin-right: 50px;
     background: white;
     font-family: Poppins-Medium, sans-serif;
     transition: all 0.3s ease-in-out;
@@ -107,3 +116,21 @@ body {
         font-family: Poppins-Medium, sans-serif;
         transition: all 0.3s ease-in-out;
     }
+.link{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+.link a{
+  text-decoration: none;
+  font-size: 20px;
+  font-family: Poppins-Bold;
+  color: black;
+}
+
+.container .title{
+  margin-bottom: 15px;
+  font-size: 22px;
+  font-family: Poppins-SemiBold;
+}

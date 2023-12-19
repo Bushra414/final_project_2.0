@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             VALUES ('$FirstName', '$LastName', '$DateOfBirth', '$Gender', '$Address', '$Email', '$Phone')";
 
     if ($conn->query($sql) === TRUE) {
-    echo "welcome";
+        echo "welcome";
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -27,42 +27,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+
     <title>Student Registry</title>
 </head>
 <body>
     
-    <form action="" method="post">
+<form action="" method="post">
     <div class="container">
-    <h2>Student Registry</h2>
+    <h2>Student's Registry</h2>
         <form action="<?php $_SERVER["PHP_SELF"]?>" method="post">
-        <label for="firstname">First Name</label>
-        <input type="text" name="firstname" class="input">
+        <div class="names">
+            <div class="pos">
+
+                <label for="firstname">First Name</label>
+                <input type="text" name="firstname" class="input" required>
+                
+            </div>
+            <div class="pos">
+
+                <label for="lastname">Last Name</label>
+                <input type="text" name="lastname" class="input" required>
+                
+            </div>
+        </div>
         
-        <label for="lastname">Last Name</label>
-        <input type="text" name="lastname" class="input">
+        <label for="email">Email</label>
+        <input type="email" name="email" class="input" required>
 
         <label for="dateofbirth">Date of Birth</label>
-        <input type="date" name="dateofbirth" class="input">
+        <input type="date" name="dateofbirth" class="input" required>
 
         <label for="gender">Gender</label>
-        <select name="gender" class="input">
+        <select name="gender" class="input" required>
             <option value="male">Male</option>
             <option value="female">Female</option>
         </select>
 
         <label for="address">Address</label>
-        <input type="text" name="address" class="input">
-
-        <label for="email">Email</label>
-        <input type="email" name="email" class="input">
+        <input type="text" name="address" class="input" required>
 
         <label for="phone">Phone</label>
-        <input type="tel" name="phone" class="input">
+        <input type="tel" name="phone" class="input" required>
 
         <input type="submit" value="Submit" class="btn">
     </form>
-    <a href="student_login.php">u a student?</a>
-</body>
+    <div class="link">
+
+        <a href="student_login.php">Are you already a student?</a>
+    </div>
+    </body>
 </html>
 
 <?php
@@ -70,4 +83,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 ?>
 ```
-

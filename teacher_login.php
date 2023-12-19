@@ -33,11 +33,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>teacher Registry</title>
+
+    <title>Teacher Login</title>
 </head>
 <body>
     <!-- Login Form -->
     <div class="container">
+
+    <label class="title">Teacher Login</label>
 
     <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="post">
         <label for="email">Email</label>
@@ -54,11 +57,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         }
         ?>
     </form>
-    </div>
+    <div class="link">
 
+<a href="teacher_index.php">Are you already a part of our staff?</a>
+</div>
+    </div>
 </body>
 </html>
 
 <?php
 $conn->close();
 ?>
+```

@@ -4,6 +4,11 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: student_login.php");
     exit();
 }
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: student_login.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,6 +45,7 @@ if (!isset($_SESSION['user_id'])) {
 </head>
 <header>
     <h1><?php echo  "Welcome " . $_SESSION['user_name'] . ", this is your results table" ?></h1>
+    <a href="?logout=true" style="position: absolute; top: 10px; right: 10px; background-color: red; color: white; padding: 5px 10px; text-decoration: none;">Logout</a>
   </header>
 <body>
   <table id="subjectResults">
@@ -75,3 +81,4 @@ if (!isset($_SESSION['user_id'])) {
   </script>
 </body>
 </html>
+```

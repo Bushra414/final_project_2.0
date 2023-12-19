@@ -33,11 +33,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Student Registry</title>
+
+    <title>Student Login</title>
 </head>
 <body>
     <!-- Login Form -->
     <div class="container">
+
+    <label class="title">Student Login</label>
 
     <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="post">
         <label for="email">Email</label>
@@ -46,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         <label for="phone">phone</label>
         <input type="tel" name="phone" class="input" required>
 
-        <input type="submit" value="Login" name="login" class="btn">
+        <input type="submit" value="Login" name="login" class="btn" required>
         
         <?php
         if (isset($login_error)) {
@@ -54,11 +57,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         }
         ?>
     </form>
-    </div>
+    <div class="link">
 
+<a href="index.php">Are you already a student?</a>
+</div>
+    </div>
 </body>
 </html>
+
 
 <?php
 $conn->close();
 ?>
+```
