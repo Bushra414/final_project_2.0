@@ -1,147 +1,139 @@
 <?php
 session_start();
 include 'connection.php';
-include 'models.php'; // Make sure this file includes the functions
+include 'models.php';
 
+// Process form submissions
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['logout_button'])) {
+        // Handle logout logic here
+        session_destroy();
+        header("Location: teacher_login.php");
+        exit();
+    } elseif (isset($_POST['delete_button'])) {
+        // Handle delete student logic here
+        $sidToDelete = $_POST['delete_button'];
+        $message = deleteStudent($sidToDelete) ? "Student with SID $sidToDelete deleted successfully." : "Error deleting student with SID $sidToDelete.";
+        echo $message;
+    } elseif (isset($_POST['insert_marks_button'])) {
+        // Handle insert marks logic here
+        $sid = mysqli_real_escape_string($conn, $_POST['sid']);
+        $subid = mysqli_real_escape_string($conn, $_POST['subid']);
+        $marks = mysqli_real_escape_string($conn, $_POST['marks']);
+
+        if (insertStudentMarks($sid, $subid, $marks)) {
+            echo "Marks inserted successfully for Student ID $sid and Subject ID $subid";
+        } else {
+            echo "Error inserting marks for Student ID $sid and Subject ID $subid";
+        }
+    } elseif (isset($_POST['add_subject_button'])) {
+        // Handle add subject logic here
+        $subject = mysqli_real_escape_string($conn, $_POST['subject']);
+
+        $sql = "INSERT INTO subjects (subject_name) VALUES ('$subject')";
+
+        if ($conn->query($sql) === TRUE) {
+            echo "Subject '$subject' added successfully.";
+        } else {
+            echo "Error adding subject: " . $conn->error;
+        }
+    }
+}
+
+// Retrieve data for display
 $studentNames = getAllStudentNames();
 $subjects = getAllSubjects();
-
-if (isset($_POST['logout_button'])) {
-    // Handle logout logic here
-    session_destroy();
-    header("Location: teacher_login.php");
-    exit();
-}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Teacher's Dashboard</title>
     <style>
-        @font-face {
-            font-family: Poppins-Regular;
-            src: url("fonts/Poppins/Poppins-Regular.ttf");
-        }
-        @font-face {
-            font-family: Poppins-Medium;
-            src: url("fonts/Poppins/Poppins-Medium.ttf");
-        }
-        @font-face {
-            font-family: Poppins-Bold;
-            src: url("fonts/Poppins/Poppins-Bold.ttf");
-        }
-        @font-face {
-            font-family: Poppins-SemiBold;
-            src: url("fonts/Poppins/Poppins-SemiBold.ttf");
-        }
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            height: 100vh;
-            margin: 0;
-            padding: 0;
-            background: radial-gradient(
-                circle at 8% 50%,
-                rgb(21, 211, 224),
-                rgb(144, 124, 195),
-                rgb(243, 78, 232),
-                rgb(244, 57, 138)
-            );
-            font-family: Poppins-Regular, sans-serif;
-            font-size: 16px;
-        }
-        header {
-            color: black;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-        h1 {
-            margin: 0;
-            font-family: Poppins-Bold;
-        }
-        .logout-button {
-            margin-right: 20px;
-        }
-        button {
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: Poppins-Bold;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .container {
-            border-radius: 30px;
-            display: flex;
-            flex-direction: column;
-            padding: 30px;
-            background: white;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-            margin: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 15px;
-            text-align: center;
-            font-family: Poppins-Medium;
-        }
-        th {
-            background-color: #f2f2f2;
-            font-family: Poppins-Bold;
-        }
+        /* Add any additional styling here */
     </style>
 </head>
 
 <body>
-<header>
-    <h1><?php echo "Welcome " . $_SESSION['user_name'] . ", these are your students"; ?></h1>
-    <div class="logout-button">
+    <header>
+        <h1><?php echo "Welcome " . $_SESSION['user_name'] . ", these are your students"; ?></h1>
+        <div class="logout-button">
+            <form method="post" action="">
+                <button type="submit" name="logout_button">Log Out</button>
+            </form>
+        </div>
+    </header>
+    <div class="container">
+        <h2>Student List</h2>
+        <table>
+            <tr>
+                <th>SID</th>
+                <th>Student Name</th>
+                <?php foreach ($subjects as $subject) : ?>
+                    <th><?= $subject["subject_name"] ?></th>
+                <?php endforeach; ?>
+            </tr>
+            <?php foreach ($studentNames as $student) : ?>
+                <tr>
+                    <td><?= $student['SID'] ?></td>
+                    <td><?= $student['first_name'] . " " . $student['last_name'] ?></td>
+                    <?php foreach ($subjects as $subject) : ?>
+                        <td><?= getStudentMarks($student['SID'], $subject["SubID"]) ?? "N/A" ?></td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
+
+    <div class="container">
+        <h2>Delete Students</h2>
+        <ul>
+            <?php foreach ($studentNames as $student) : ?>
+                <li>
+                    <?= $student['first_name'] . " " . $student['last_name'] ?>
+                    <form method='post' action='<?php echo $_SERVER['PHP_SELF']; ?>'>
+                        <input type='hidden' name='delete_button' value='<?= $student['SID'] ?>'>
+                        <button type='submit'>Delete</button>
+                    </form>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h2>Insert Marks</h2>
         <form method="post" action="">
-            <button type="submit" name="logout_button">Log Out</button>
+            <label for="sid">Student:</label>
+            <select name="sid" id="sid" required>
+                <?php foreach ($studentNames as $student) : ?>
+                    <option value="<?= $student['SID'] ?>"><?= $student['first_name'] . " " . $student['last_name'] ?></option>
+                <?php endforeach; ?>
+            </select>
+
+            <label for="subid">Subject:</label>
+            <select name="subid" id="subid" required>
+                <?php foreach ($subjects as $subject) : ?>
+                    <option value="<?= $subject['SubID'] ?>"><?= $subject['subject_name'] ?></option>
+                <?php endforeach; ?>
+            </select>
+
+            <label for="marks">Marks:</label>
+            <input type="number" name="marks" id="marks" required>
+
+            <button type="submit" class="btn" name="insert_marks_button">Insert Marks</button>
         </form>
     </div>
-</header>
-<div class="container">
-    <table>
-        <tr>
-            <th>SID</th>
-            <th>Student Name</th>
-            <?php
-            foreach ($subjects as $subject) {
-                echo "<th>" . $subject["subject_name"] . "</th>";
-            }
-            ?>
-        </tr>
-        <?php
-        foreach ($studentNames as $student) {
-            echo "<tr>";
-            echo "<td>" . $student['SID'] . "</td>";
-            echo "<td>" . $student['first_name'] . " " . $student['last_name'] . "</td>";
-            foreach ($subjects as $subject) {
-                $marks = getStudentMarks($student['SID'], $subject["SubID"]);
-                echo "<td>" . ($marks !== null ? $marks : "N/A") . "</td>";
-            }
-            echo "</tr>";
-        }
-        ?>
-    </table>
-</div>
 
+    <div class="container">
+        <h2>Add Subject</h2>
+        <form method="post" action="">
+            <label for="subject">Subject:</label>
+            <input type="text" name="subject" class="input">
+            <button type="submit" class="btn" name="add_subject_button">Add Subject</button>
+        </form>
+    </div>
 </body>
 </html>
