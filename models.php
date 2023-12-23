@@ -56,12 +56,20 @@ function insertStudentMarks($sid, $subid, $marks) {
     $subid = mysqli_real_escape_string($conn, $subid);
     $marks = mysqli_real_escape_string($conn, $marks);
 
-    $sql = "INSERT INTO student_result (SID, SubID, marks) VALUES ('$sid', '$subid', '$marks')";
+    // Check if the student already has a mark for the specified subject
+    $checkQuery = "SELECT marks FROM student_result WHERE SID = '$sid' AND SubID = '$subid'";
+    $checkResult = $conn->query($checkQuery);
 
-    if ($conn->query($sql) === TRUE) {
-        return true; // Insert successful
+    if ($checkResult->num_rows > 0) {
+        return "Error: The student is already graded for this subject."; // Return error message if the student already has a mark
     } else {
-        return false; // Insert failed
+        $sql = "INSERT INTO student_result (SID, SubID, marks) VALUES ('$sid', '$subid', '$marks')";
+
+        if ($conn->query($sql) === TRUE) {
+            return true; // Insert successful
+        } else {
+            return false; // Insert failed
+        }
     }
 }
 function deleteStudent($sid) {
@@ -84,6 +92,45 @@ function deleteStudent($sid) {
         }
     } else {
         // Student with the given SID does not exist
+        return false;
+    }
+}
+function updateStudentMarks($studentName, $subjectName, $marks) {
+    global $conn;
+
+    $studentName = mysqli_real_escape_string($conn, $studentName);
+    $subjectName = mysqli_real_escape_string($conn, $subjectName);
+    $marks = mysqli_real_escape_string($conn, $marks);
+
+    // Get the SID and SubID from the student's name and subject's name
+    $sidQuery = "SELECT SID FROM student_info WHERE CONCAT(first_name, ' ', last_name) = '$studentName'";
+    $subidQuery = "SELECT SubID FROM subjects WHERE subject_name = '$subjectName'";
+    $sidResult = $conn->query($sidQuery);
+    $subidResult = $conn->query($subidQuery);
+
+    if ($sidResult->num_rows > 0 && $subidResult->num_rows > 0) {
+        $sid = $sidResult->fetch_assoc()['SID'];
+        $subid = $subidResult->fetch_assoc()['SubID'];
+
+        // Check if the student with the given SID and SubID already has marks
+        $checkQuery = "SELECT marks FROM student_result WHERE SID = '$sid' AND SubID = '$subid'";
+        $checkResult = $conn->query($checkQuery);
+
+        if ($checkResult->num_rows > 0) {
+            // Student has marks, proceed with update
+            $sql = "UPDATE student_result SET marks = '$marks' WHERE SID = '$sid' AND SubID = '$subid'";
+
+            if ($conn->query($sql) === TRUE) {
+                return true; // Update successful
+            } else {
+                return false; // Update failed
+            }
+        } else {
+            // Student with the given SID and SubID does not have marks
+            return "Error: No marks found for this student in this subject. Please insert marks first."; // Return error message if no marks found
+        }
+    } else {
+        // Student with the given name or subject with the given name does not exist
         return false;
     }
 }

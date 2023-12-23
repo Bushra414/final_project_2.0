@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+if (!isset($_SESSION['user_name'])) {
+    header("Location: teacher_login.php");
+    exit();
+}
+
 include 'connection.php';
 include 'models.php';
 
@@ -21,8 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $subid = mysqli_real_escape_string($conn, $_POST['subid']);
         $marks = mysqli_real_escape_string($conn, $_POST['marks']);
 
-        if (insertStudentMarks($sid, $subid, $marks)) {
+        $insertResult = insertStudentMarks($sid, $subid, $marks);
+        if ($insertResult === true) {
             echo "Marks inserted successfully for Student ID $sid and Subject ID $subid";
+        } elseif ($insertResult === "Error: The student is already graded for this subject.") {
+            echo $insertResult;
         } else {
             echo "Error inserting marks for Student ID $sid and Subject ID $subid";
         }
@@ -36,6 +45,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "Subject '$subject' added successfully.";
         } else {
             echo "Error adding subject: " . $conn->error;
+        }
+    } elseif (isset($_POST['update_marks_button'])) {
+        $studentName = mysqli_real_escape_string($conn, $_POST['student_name']);
+        $subjectName = mysqli_real_escape_string($conn, $_POST['subject_name']);
+        $marks = mysqli_real_escape_string($conn, $_POST['marks']);
+
+        if (updateStudentMarks($studentName, $subjectName, $marks)) {
+            echo "Marks updated successfully for $studentName in $subjectName";
+        } else {
+            echo "Error updating marks for $studentName in $subjectName";
         }
     }
 }
@@ -51,7 +70,7 @@ $subjects = getAllSubjects();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./NEW.css">
+    <link rel="stylesheet" href="./sty.css">
     <title>Teacher's Dashboard</title>
 </head>
 
@@ -132,7 +151,33 @@ $subjects = getAllSubjects();
                 <?php endforeach; ?>
             </ul>
         </div>
+        <div class="container">
+            <h2>Update Marks</h2>
+            <form method="post" action="">
+                <label for="student_name">Student:</label>
+                <select name="student_name" id="student_name" required>
+                    <?php foreach ($studentNames as $student) : ?>
+                        <option value="<?= $student['first_name'] . ' ' . $student['last_name'] ?>">
+                            <?= $student['first_name'] . ' ' . $student['last_name'] ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+
+                <label for="subject_name">Subject:</label>
+                <select name="subject_name" id="subject_name" required>
+                    <?php foreach ($subjects as $subject) : ?>
+                        <option value="<?= $subject['subject_name'] ?>"><?= $subject['subject_name'] ?></option>
+                    <?php endforeach; ?>
+                </select>
+
+                <label for="marks">Marks:</label>
+                <input type="number" name="marks" id="marks" required>
+
+                <button type="submit" class="btn" name="update_marks_button">Update Marks</button>
+            </form>
+        </div>
     </div>
+    
 
 </body>
 
