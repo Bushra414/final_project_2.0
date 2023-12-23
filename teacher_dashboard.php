@@ -47,14 +47,12 @@ $subjects = getAllSubjects();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./NEW.css">
     <title>Teacher's Dashboard</title>
-    <style>
-        /* Add any additional styling here */
-    </style>
 </head>
 
 <body>
@@ -62,78 +60,80 @@ $subjects = getAllSubjects();
         <h1><?php echo "Welcome " . $_SESSION['user_name'] . ", these are your students"; ?></h1>
         <div class="logout-button">
             <form method="post" action="">
-                <button type="submit" name="logout_button">Log Out</button>
+                <button type="submit" class="btn red" name="logout_button">Log Out</button>
             </form>
         </div>
     </header>
-    <div class="container">
-        <h2>Student List</h2>
-        <table>
-            <tr>
-                <th>SID</th>
-                <th>Student Name</th>
-                <?php foreach ($subjects as $subject) : ?>
-                    <th><?= $subject["subject_name"] ?></th>
-                <?php endforeach; ?>
-            </tr>
-            <?php foreach ($studentNames as $student) : ?>
+    <div class="super-container">
+
+        <div class="container">
+            <h2>Student List</h2>
+            <table>
                 <tr>
-                    <td><?= $student['SID'] ?></td>
-                    <td><?= $student['first_name'] . " " . $student['last_name'] ?></td>
+                    <th>SID</th>
+                    <th>Student Name</th>
                     <?php foreach ($subjects as $subject) : ?>
-                        <td><?= getStudentMarks($student['SID'], $subject["SubID"]) ?? "N/A" ?></td>
+                        <th><?= $subject["subject_name"] ?></th>
                     <?php endforeach; ?>
                 </tr>
-            <?php endforeach; ?>
-        </table>
-    </div>
-
-    <div class="container">
-        <h2>Delete Students</h2>
-        <ul>
-            <?php foreach ($studentNames as $student) : ?>
-                <li>
-                    <?= $student['first_name'] . " " . $student['last_name'] ?>
-                    <form method='post' action='<?php echo $_SERVER['PHP_SELF']; ?>'>
-                        <input type='hidden' name='delete_button' value='<?= $student['SID'] ?>'>
-                        <button type='submit'>Delete</button>
-                    </form>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-
-    <div class="container">
-        <h2>Insert Marks</h2>
-        <form method="post" action="">
-            <label for="sid">Student:</label>
-            <select name="sid" id="sid" required>
                 <?php foreach ($studentNames as $student) : ?>
-                    <option value="<?= $student['SID'] ?>"><?= $student['first_name'] . " " . $student['last_name'] ?></option>
+                    <tr>
+                        <td><?= $student['SID'] ?></td>
+                        <td><?= $student['first_name'] . " " . $student['last_name'] ?></td>
+                        <?php foreach ($subjects as $subject) : ?>
+                            <td><?= getStudentMarks($student['SID'], $subject["SubID"]) ?? "N/A" ?></td>
+                        <?php endforeach; ?>
+                    </tr>
                 <?php endforeach; ?>
-            </select>
+            </table>
+        </div>
+        <div class="container">
+            <h2>Insert Marks</h2>
+            <form method="post" action="">
+                <label for="sid">Student:</label>
+                <select name="sid" id="sid" required>
+                    <?php foreach ($studentNames as $student) : ?>
+                        <option value="<?= $student['SID'] ?>"><?= $student['first_name'] . " " . $student['last_name'] ?></option>
+                    <?php endforeach; ?>
+                </select>
 
-            <label for="subid">Subject:</label>
-            <select name="subid" id="subid" required>
-                <?php foreach ($subjects as $subject) : ?>
-                    <option value="<?= $subject['SubID'] ?>"><?= $subject['subject_name'] ?></option>
+                <label for="subid">Subject:</label>
+                <select name="subid" id="subid" required>
+                    <?php foreach ($subjects as $subject) : ?>
+                        <option value="<?= $subject['SubID'] ?>"><?= $subject['subject_name'] ?></option>
+                    <?php endforeach; ?>
+                </select>
+
+                <label for="marks">Marks:</label>
+                <input type="number" name="marks" id="marks" required>
+
+                <button type="submit" class="btn" name="insert_marks_button">Insert Marks</button>
+            </form>
+        </div>
+        <div class="container">
+            <h2>Add Subject</h2>
+            <form method="post" action="">
+                <label for="subject">Subject:</label>
+                <input type="text" name="subject" class="input">
+                <button type="submit" class="btn" name="add_subject_button">Add Subject</button>
+            </form>
+        </div>
+        <div class="container">
+            <h2>Delete Students</h2>
+            <ul>
+                <?php foreach ($studentNames as $student) : ?>
+                    <li>
+                        <?= $student['first_name'] . " " . $student['last_name'] ?>
+                        <form method='post' action='<?php echo $_SERVER['PHP_SELF']; ?>'>
+                            <input type='hidden' name='delete_button' value='<?= $student['SID'] ?>'>
+                            <button class="btn red" type='submit'>Delete</button>
+                        </form>
+                    </li>
                 <?php endforeach; ?>
-            </select>
-
-            <label for="marks">Marks:</label>
-            <input type="number" name="marks" id="marks" required>
-
-            <button type="submit" class="btn" name="insert_marks_button">Insert Marks</button>
-        </form>
+            </ul>
+        </div>
     </div>
 
-    <div class="container">
-        <h2>Add Subject</h2>
-        <form method="post" action="">
-            <label for="subject">Subject:</label>
-            <input type="text" name="subject" class="input">
-            <button type="submit" class="btn" name="add_subject_button">Add Subject</button>
-        </form>
-    </div>
 </body>
+
 </html>
