@@ -49,6 +49,8 @@ function getStudentMarks($sid, $subid) {
         return null; // Return null if no marks found for the specified SID and SubID
     }
 }
+
+
 function insertStudentMarks($sid, $subid, $marks) {
     global $conn;
 

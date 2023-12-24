@@ -15,45 +15,22 @@ if (isset($_GET['logout'])) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      padding: 20px;
-    }
-    table {
-      width: 100%;
-      margin-top: 20px;
-      border-collapse: collapse;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    th, td {
-      padding: 8px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-    th {
-      background-color: #4CAF50;
-      color: white;
-      font-weight: bold;
-    }
-    tr:nth-child(even) {
-      background-color: #f2f2f2;
-    }
-  </style>
+  <link rel="stylesheet" href="./styles.css">
+
 </head>
 <header>
     <h1><?php echo  "Welcome " . $_SESSION['user_name'] . ", this is your results table" ?></h1>
     <a href="?logout=true" style="position: absolute; top: 10px; right: 10px; background-color: red; color: white; padding: 5px 10px; text-decoration: none;">Logout</a>
   </header>
 <body>
-  <table id="subjectResults">
-    <tr>
-      <th>Subject</th>
-      <th>Result</th>
-    </tr>
-    <?php
+  <div class="container" style="width: 700px;">
+
+    <table id="subjectResults">
+      <tr>
+        <th>Subject</th>
+        <th>Result</th>
+      </tr>
+      <?php
     include 'connection.php';
     $sid = $_SESSION['user_id'];
     $query = "SELECT * FROM student_result WHERE sid = $sid";
@@ -75,7 +52,8 @@ if (isset($_GET['logout'])) {
     }
     ?>
   </table>
-
+</div>
+  
   <script>
     // ... (any additional scripts) ...
   </script>

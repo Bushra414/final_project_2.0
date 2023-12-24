@@ -10,41 +10,42 @@
     font-family: Poppins-Bold;
     src: url("fonts/Poppins/Poppins-Bold.ttf");
   }
-  
   @font-face {
     font-family: Poppins-SemiBold;
     src: url("fonts/Poppins/Poppins-SemiBold.ttf");
   }
 body {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    justify-content: space-evenly;
     margin: 0;
     padding: 0;
     background-color: #313131;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.171) 2px, transparent 0);
-  background-size: 30px 30px;
-  background-position: -5px -5px;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.171) 2px, transparent 0);
+    background-size: 30px 30px;
+    background-position: -5px -5px;
     font-family: Poppins-Regular, sans-serif;
     font-size: 16px; /* Added font size */
   }
   header{
     display: flex;
     justify-content: space-around;
-    width: 100%;
+    width: 1000px;
   }
   header h1{
     color: white;
+  }
+  .super-container{
+    margin-left: 200px;
+    position: relative;
   }
   .container {
     border-radius: 30px;
     display: flex;
     margin-top: 10px;
-
+    opacity: 0.8;
+    background: white;
     flex-direction: column;
     padding: 30px;
-    background: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   }
   form{
@@ -55,7 +56,6 @@ body {
   }
   form label {
     display: flex;
-   
     flex-direction: column;
     margin-bottom: 10px;
     margin-top: 10px;
@@ -63,7 +63,6 @@ body {
   }
   form .names{
     display: flex;
-  
     justify-content: start;
   }
   form pos{
@@ -105,52 +104,75 @@ body {
   .btn.red{
     color: #ffffff;
     background-color: #e31b1b; /* Added background color */
-
   }
-    table {
-        border-collapse: collapse;
-        width: 100%; /* Added width */
-    }
-    th, td {
-        border: 1px solid black;
-        padding: 15px;
-        text-align: center;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
-    select {
-        width: 100%;
-        border: none;
-        border-bottom: solid rgb(206, 202, 202) 2px;
-        height: 30px;
-        background: white;
-        font-family: Poppins-Medium, sans-serif;
-        transition: all 0.3s ease-in-out;
-    }
-.link{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 10px;
-}
-.link a{
-  text-decoration: none;
-  font-size: 20px;
-  font-family: Poppins-Bold;
-  color: black;
-}
-
-.container .title{
-  margin-bottom: 15px;
-  font-size: 22px;
-  font-family: Poppins-SemiBold;
-}
-
-.container ul li{
-  list-style: none;
-  font-size: 20px;
-  text-transform: capitalize;
-  display: flex;
-  justify-content: space-between;
-}
+  table {
+    border-collapse: collapse;
+    width: 100%; /* Added width */
+  }
+  th, td {
+    border: 1px solid black;
+    padding: 15px;
+    text-align: center;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  select {
+    width: 100%;
+    border: none;
+    border-bottom: solid rgb(206, 202, 202) 2px;
+    height: 30px;
+    background: white;
+    font-family: Poppins-Medium, sans-serif;
+    transition: all 0.3s ease-in-out;
+  }
+  .link{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .link a{
+    text-decoration: none;
+    font-size: 20px;
+    font-family: Poppins-Bold;
+    color: black;
+  }
+  .container .title{
+    margin-bottom: 15px;
+    font-size: 22px;
+    font-family: Poppins-SemiBold;
+  }
+  .container ul li{
+    list-style: none;
+    font-size: 20px;
+    text-transform: capitalize;
+    display: flex;
+    justify-content: space-between;
+  }
+  .side-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 200px;
+    background-color: #1b85e3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+  }
+  .side-panel .link {
+    margin: 15px 0;
+  }
+  .side-panel a {
+    text-decoration: none;
+    font-size: 18px;
+    font-family: Poppins-Bold;
+    color: white;
+    transition: color 0.3s ease-in-out;
+  }
+  .side-panel a:hover {
+    color: #f2f2f2;
+  }

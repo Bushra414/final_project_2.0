@@ -70,23 +70,38 @@ $subjects = getAllSubjects();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./sty.css">
+    <link rel="stylesheet" href="./styles.css">
     <title>Teacher's Dashboard</title>
 </head>
 
-<body>
-    <header>
-        <h1><?php echo "Welcome " . $_SESSION['user_name'] . ", these are your students"; ?></h1>
-        <div class="logout-button">
-            <form method="post" action="">
-                <button type="submit" class="btn red" name="logout_button">Log Out</button>
-            </form>
+<body onload="initPage()">
+    <div class="side-panel">
+        <div class="link">
+            <a href="#" onclick="showSection('student-list')">Student List</a>
         </div>
-    </header>
+        <div class="link">
+            <a href="#" onclick="showSection('insert-marks')">Insert Marks</a>
+        </div>
+        <div class="link">
+            <a href="#" onclick="showSection('add-subject')">Add Subject</a>
+        </div>
+        <div class="link">
+            <a href="#" onclick="showSection('update-marks')">Update Marks</a>
+        </div>
+        <div class="link">
+            <a href="#" onclick="showSection('delete-students')">Delete Students</a>
+        </div>
+    </div>
     <div class="super-container">
-
-        <div class="container">
-            <h2>Student List</h2>
+        <header>
+            <h1><?php echo "Welcome " . $_SESSION['user_name'] . ", these are your students"; ?></h1>
+            <div class="logout-button">
+                <form method="post" action="">
+                    <button type="submit" class="btn red" name="logout_button">Log Out</button>
+                </form>
+            </div>
+        </header>
+        <div class="container" id="student-list-section">            <h2 id="student-list">Student List</h2>
             <table>
                 <tr>
                     <th>SID</th>
@@ -106,8 +121,8 @@ $subjects = getAllSubjects();
                 <?php endforeach; ?>
             </table>
         </div>
-        <div class="container">
-            <h2>Insert Marks</h2>
+        <div class="container" id="insert-marks-section">
+            <h2 id="insert-marks">Insert Marks</h2>
             <form method="post" action="">
                 <label for="sid">Student:</label>
                 <select name="sid" id="sid" required>
@@ -129,16 +144,16 @@ $subjects = getAllSubjects();
                 <button type="submit" class="btn" name="insert_marks_button">Insert Marks</button>
             </form>
         </div>
-        <div class="container">
-            <h2>Add Subject</h2>
+        <div class="container" id="add-subject-section">
+            <h2 id="add-subject">Add Subject</h2>
             <form method="post" action="">
                 <label for="subject">Subject:</label>
                 <input type="text" name="subject" class="input">
                 <button type="submit" class="btn" name="add_subject_button">Add Subject</button>
             </form>
         </div>
-        <div class="container">
-            <h2>Delete Students</h2>
+        <div class="container" id="delete-students-section">
+            <h2 id="delete-students">Delete Students</h2>
             <ul>
                 <?php foreach ($studentNames as $student) : ?>
                     <li>
@@ -151,8 +166,8 @@ $subjects = getAllSubjects();
                 <?php endforeach; ?>
             </ul>
         </div>
-        <div class="container">
-            <h2>Update Marks</h2>
+        <div class="container" id="update-marks-section">
+            <h2 id="update-marks">Update Marks</h2>
             <form method="post" action="">
                 <label for="student_name">Student:</label>
                 <select name="student_name" id="student_name" required>
@@ -177,8 +192,29 @@ $subjects = getAllSubjects();
             </form>
         </div>
     </div>
-    
+    <script>
+        function initPage() {
+            // Hide all sections except the "Student List" section
+            document.querySelectorAll('.container').forEach(function (section) {
+                section.style.display = 'none';
+            });
 
+            document.getElementById('student-list-section').style.display = 'block';
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.container').forEach(function (section) {
+                section.style.display = 'none';
+            });
+
+            // Show the selected section
+            document.getElementById(sectionId + '-section').style.display = 'block';
+        }
+    </script>
 </body>
 
 </html>
+
+
+
